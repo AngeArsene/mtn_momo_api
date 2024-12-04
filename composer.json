@@ -1,7 +1,7 @@
 {
     "name": "arge-arsene/mtn_momo_payment_gateway",
     "description": "The mtn_momo_payment_gateway is a robust integration solution designed for developers and businesses looking to incorporate MTN Mobile Money (MoMo) payment services into their applications. This gateway facilitates seamless transactions, allowing users to make payments directly through the MTN MoMo platform",
-    "type": "library",
+    "type": "project",
     "require": {
         "guzzlehttp/guzzle": "8.0.x-dev",
         "ramsey/uuid": "5.x-dev",
