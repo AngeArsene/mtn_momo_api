@@ -25,7 +25,8 @@ class Application
     {
         self::$PRIMARY_KEY   = $this->env()->primary_key;
         self::$SECONDARY_KEY = $this->env()->secondary_key;
-
+        
+        
     }
 
     private function env(): object
@@ -36,15 +37,11 @@ class Application
         return (object) $_ENV;
     }
 
-    private function user_reference_id(): string
+    protected function user_reference_id(): string
     {
-        if ($this->env()->user_reference_id !== "") {
-            return $this->env()->user_reference_id;
-        } else {
-            $uuid = Uuid::uuid4()->toString();
+        $uuid = Uuid::uuid4();
 
-            return $this->write_to_env('user_reference_id', $uuid);
-        }
+        return $this->write_to_env('user_reference_id', $uuid);
     }
 
     private function write_to_env(string $key, string $value): string
