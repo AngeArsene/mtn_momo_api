@@ -85,7 +85,7 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
         ),
         'MtnMomoPaymentGateway\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/core',
+            0 => __DIR__ . '/../..' . '/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
