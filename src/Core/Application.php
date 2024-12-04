@@ -3,11 +3,15 @@
 namespace MtnMomoPaymentGateway\Core;
 
 use Dotenv\Dotenv;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use Ramsey\Uuid\Uuid;
 
 class Application 
 {
     public static string $HOME_DIR;
+
+    private Client $http_client;
     
     protected static string $PRIMARY_KEY;
     protected static string $SECONDARY_KEY;
@@ -17,8 +21,10 @@ class Application
         self::$HOME_DIR = dirname(dirname(__DIR__));
 
         $this->bootstrap();
+        
+        $this->http_client = new Client(['verify' => false]);
 
-        var_dump($this->user_reference_id());
+        var_dump($this->create_api_key());
     }
 
     private function bootstrap(): void
@@ -44,6 +50,50 @@ class Application
         return $this->write_to_env('user_reference_id', $uuid);
     }
 
+    protected function create_api_key(): string
+    {
+        if ($this->create_api_user()) {
+            $headers = [
+                'Cache-Control' => 'no-cache',
+                'Ocp-Apim-Subscription-Key' => $this->env()->primary_key
+            ];
+
+            $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/'.$this->user_reference_id().'/apikey', $headers);
+
+            $res = $this->http_client->send($request);
+            $api_key = json_decode($res->getBody())->apiKey;
+
+            return $this->write_to_env('user_api_key', $api_key);
+
+        } else {
+            return $this->env()->user_api_key;
+        }
+    }
+
+    private function create_api_user(): bool
+    {
+        $callback_url = $this->env()->callback_url;
+
+        $headers = [
+            'X-Reference-Id' => $this->user_reference_id(),
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-cache',
+            'Ocp-Apim-Subscription-Key' => $this->env()->primary_key
+        ];
+
+        $body = '{
+            "providerCallbackHost": ' . '"'.$callback_url.'"' . '
+        }';
+
+        $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser', $headers, $body);
+
+        try {
+            $res = $this->http_client->send($request);
+            return $res->getStatusCode() === 201 ?: $this->create_api_user();
+
+        } catch (\Throwable $e) { return false; }
+    }
+    
     private function write_to_env(string $key, string $value): string
     {
         $envFile = self::$HOME_DIR . DIRECTORY_SEPARATOR .'.env';
@@ -83,5 +133,4 @@ class Application
         // This point should not be reached
         return null; // Fallback return
     }
-
 }
