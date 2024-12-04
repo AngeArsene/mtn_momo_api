@@ -32,6 +32,10 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
             'Psr\\Http\\Client\\' => 16,
             'PhpOption\\' => 10,
         ),
+        'M' => 
+        array (
+            'MtnMomoPaymentGateway\\' => 22,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -46,10 +50,6 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
         'B' => 
         array (
             'Brick\\Math\\' => 11,
-        ),
-        'A' => 
-        array (
-            'ArgeArsene\\MtnMomoPaymentGateway\\' => 33,
         ),
     );
 
@@ -83,6 +83,10 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
+        'MtnMomoPaymentGateway\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -106,10 +110,6 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
-        ),
-        'ArgeArsene\\MtnMomoPaymentGateway\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/',
         ),
     );
 

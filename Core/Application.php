@@ -1,8 +1,8 @@
 <?php 
 
-namespace AngeArsene\MtnMomoPaymentGateway\Core;
+namespace MtnMomoPaymentGateway;
 
-final class Application 
+class Application 
 {
     public function __construct() 
     {
