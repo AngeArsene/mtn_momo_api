@@ -2,6 +2,6 @@
 
 require './vendor/autoload.php';
 
-use AngeArsene\MtnMomoPaymentGateway\Application; // This should match
+use AngeArsene\MtnMomoPaymentGateway\Core\Application;
 
 $application = new Application();

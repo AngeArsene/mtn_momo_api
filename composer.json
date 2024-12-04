@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ArgeArsene\\MtnMomoPaymentGateway\\": "./src/"
+            "ArgeArsene\\MtnMomoPaymentGateway\\": "./"
         }
     },
     "authors": [

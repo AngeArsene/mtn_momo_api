@@ -19,5 +19,5 @@ return array(
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
-    'ArgeArsene\\MtnMomoPaymentGateway\\' => array($baseDir . '/src'),
+    'ArgeArsene\\MtnMomoPaymentGateway\\' => array($baseDir . '/'),
 );

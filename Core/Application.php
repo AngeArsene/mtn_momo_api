@@ -1,6 +1,6 @@
 <?php 
 
-namespace AngeArsene\MtnMomoPaymentGateway;
+namespace AngeArsene\MtnMomoPaymentGateway\Core;
 
 final class Application 
 {

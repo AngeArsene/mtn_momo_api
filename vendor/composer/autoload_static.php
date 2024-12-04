@@ -109,7 +109,7 @@ class ComposerStaticInit62cc3343ce9a95791a26adebfe55f3de
         ),
         'ArgeArsene\\MtnMomoPaymentGateway\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/',
         ),
     );
 
