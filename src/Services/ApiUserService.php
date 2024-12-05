@@ -5,8 +5,8 @@ namespace MtnMomoPaymentGateway\Services;
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use MtnMomoPaymentGateway\Core\Application;
 use MtnMomoPaymentGateway\Utils\Helper;
+use MtnMomoPaymentGateway\Core\Application;
 
 final class ApiUserService 
 {
