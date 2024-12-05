@@ -5,16 +5,24 @@ namespace MtnMomoPaymentGateway\Utils;
 use Dotenv\Dotenv;
 use MtnMomoPaymentGateway\Core\Application;
 
+/**
+ * Class Helper
+ * 
+ * Provides utility functions for handling environment variables and configuration.
+ */
 final class Helper 
 {
 
-    private function env_file()
+    /**
+     * Get the path to the .env file
+     */
+    private function env_file(): string
     {
         return Application::$HOME_DIR. DIRECTORY_SEPARATOR. '.env';
     }
 
     /**
-     * Loads environment variables
+     * Loads environment variables from the .env file
      *
      * @return object An object containing environment variables
      */
@@ -35,7 +43,7 @@ final class Helper
      */
     public static function write_to_env(string $key, string $value): string
     {
-        $envFile = self::env_file();
+        $envFile = (new self())->env_file();
 
         // Read the existing content of the .env file
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -68,9 +76,6 @@ final class Helper
             file_put_contents($envFile, implode(PHP_EOL, $lines) . PHP_EOL);
             return $value; // Return the newly set value
         }
-
-        // This point should not be reached
-        return null; // Fallback return
     }
 
     /**
@@ -89,9 +94,9 @@ final class Helper
      * 
      * @param string $key The key to remove
      */
-    public static function remove_env_key(string $key)
+    public static function remove_env_key(string $key): void
     {
-        $envFile = self::env_file();
+        $envFile = (new self())->env_file();
 
         $value = null;
 
@@ -121,8 +126,5 @@ final class Helper
                 return; // Return the newly set value
             }
         }
-
-        // This point should not be reached
-        return null; // Fallback return
     }
 }
