@@ -25,10 +25,13 @@ class Application
     private Client $http_client;
     
     /** @var string The primary key */
-    protected static string $PRIMARY_KEY;
+    public static string $PRIMARY_KEY;
 
     /** @var string The secondary key */
-    protected static string $SECONDARY_KEY;
+    public static string $SECONDARY_KEY;
+    
+    /** @var string The secondary key */
+    public static string $CALLBACK_URL;
 
     /**
      * Constructor method
@@ -51,6 +54,7 @@ class Application
     {
         self::$PRIMARY_KEY   = Helper::env()->primary_key;
         self::$SECONDARY_KEY = Helper::env()->secondary_key;
+        self::$CALLBACK_URL   = Helper::env()->callback_url;
 
         $this->service = new ApiUserService($this->http_client);
     }

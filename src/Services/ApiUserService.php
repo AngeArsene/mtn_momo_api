@@ -5,6 +5,7 @@ namespace MtnMomoPaymentGateway\Services;
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use MtnMomoPaymentGateway\Core\Application;
 use MtnMomoPaymentGateway\Utils\Helper;
 
 final class ApiUserService 
@@ -23,13 +24,13 @@ final class ApiUserService
      */
     private function create_api_user(): bool
     {
-        $callback_url = Helper::env()->callback_url;
+        $callback_url = Application::$CALLBACK_URL;
 
         $headers = [
             'X-Reference-Id' => $this->user_reference_id(),
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache',
-            'Ocp-Apim-Subscription-Key' => Helper::env()->primary_key
+            'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY
         ];
 
         $body = '{
@@ -55,7 +56,7 @@ final class ApiUserService
         if ($this->create_api_user()) {
             $headers = [
                 'Cache-Control' => 'no-cache',
-                'Ocp-Apim-Subscription-Key' => Helper::env()->primary_key
+                'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY
             ];
 
             $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/'.$this->user_reference_id().'/apikey', $headers);
