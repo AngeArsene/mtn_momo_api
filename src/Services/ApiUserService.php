@@ -51,7 +51,7 @@ final class ApiUserService
      *
      * @return string The generated API key
      */
-    public function create_api_key(): string
+    private function create_api_key(): string
     {
         if ($this->create_api_user()) {
             $headers = [
@@ -81,5 +81,48 @@ final class ApiUserService
         $uuid = Uuid::uuid4();
 
         return Helper::write_to_env('user_reference_id', $uuid);
+    }
+
+    public function get_api_user_info(): string
+    {
+        if (!Helper::is_env_key_set('environment')) {
+            // Retrieve API user information using the generated user reference ID
+            $headers = [
+                'Cache-Control' => 'no-cache',
+                'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY
+            ];
+
+            $request = new Request('GET', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/'.$this->user_reference_id(), $headers);
+
+            $res = $this->http_client->send($request);
+            $environment = json_decode($res->getBody())->targetEnvironment;
+
+            return Helper::write_to_env('environment', $environment);
+        }
+
+        return Helper::env()->environment;
+    }
+
+    public function create_access_token()
+    {
+        // Basic authentication credentials
+        $username = $this->user_reference_id();
+        $password = $this->create_api_key();
+        $credentials = base64_encode("$username:$password");
+
+        $headers = [
+            'Cache-Control' => 'no-cache',
+            'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
+            'Authorization' => 'Basic ' . $credentials
+        ];
+
+        $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/token/', $headers);
+
+        $res = $this->http_client->send($request);
+
+        if ($res->getStatusCode() == 200) {
+            $access_token = json_decode($res->getBody())->access_token;
+            return Helper::write_to_env('access_token', $access_token);
+        }
     }
 }

@@ -41,7 +41,7 @@ class Application
         
         $this->bootstrap();
 
-        var_dump($this->service->create_api_key());
+        var_dump($this->service->create_access_token());
     }
 
     /**
@@ -53,6 +53,7 @@ class Application
         self::$SECONDARY_KEY = Helper::env()->secondary_key;
         self::$CALLBACK_URL   = Helper::env()->callback_url;
 
+        // Initialize the API service
         $this->service = new ApiUserService($this->http_client);
     }
 }

@@ -66,4 +66,15 @@ final class Helper
         // This point should not be reached
         return null; // Fallback return
     }
+
+    /**
+     * Check if a key is present in the environment variables and is set to a specific value
+     * 
+     * @param string $key The key to check
+     * @return bool True if the key is present and set to the expected value, false otherwise
+     */
+    public static function is_env_key_set(string $key): bool
+    {
+        return isset($_ENV[$key]) && $_ENV[$key] !== "";
+    }
 }
