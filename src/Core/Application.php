@@ -2,12 +2,9 @@
 
 namespace MtnMomoPaymentGateway\Core;
 
-use Dotenv\Dotenv;
-use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use MtnMomoPaymentGateway\Services\ApiUserService;
 use MtnMomoPaymentGateway\Utils\Helper;
+use MtnMomoPaymentGateway\Services\ApiUserService;
 
 /**
  * Class Application
