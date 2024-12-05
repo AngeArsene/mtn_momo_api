@@ -105,6 +105,8 @@ final class ApiUserService
 
     public function create_access_token()
     {
+        Helper::remove_env_key('access_token');
+
         // Basic authentication credentials
         $username = $this->user_reference_id();
         $password = $this->create_api_key();
