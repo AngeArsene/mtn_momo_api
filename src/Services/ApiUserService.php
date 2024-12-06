@@ -143,7 +143,12 @@ final class ApiUserService
         }
     }
 
-    public function get_transaction_status(): mixed
+     /**
+     * Get the status of a transaction
+     * 
+     * @return array|bool The status, payer number, amount, and transaction ID of the transaction
+     */
+    public function get_transaction_status(): array | bool
     {
         if (Helper::is_env_key_set('last_transaction_id')) {
             $transaction_id = Helper::env()->last_transaction_id;
@@ -169,6 +174,6 @@ final class ApiUserService
             ];
         }
 
-        return 'no previous payment request was made.';
+        return false;
     }
 }

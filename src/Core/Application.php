@@ -68,7 +68,7 @@ class Application
      * @param string $customer_number The customer number to make the payment to
      * @return ApiUserService|int The HTTP status code of the request
      */
-    public function request_to_pay(string $amount, string $customer_number): ApiUserService|int
+    public function request_to_pay(string $amount, string $customer_number): ApiUserService | int
     {
         Helper::remove_env_key('last_transaction_id');
 
@@ -98,7 +98,7 @@ class Application
         $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay', $headers, $body);
 
         $res = $this->http_client->send($request);
-        
+
         return ($res->getStatusCode() === 202 ? $this->service : 400);
     }
 }
