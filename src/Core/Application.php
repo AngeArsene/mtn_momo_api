@@ -70,8 +70,12 @@ class Application
      */
     public function request_to_pay(string $amount, string $customer_number): int
     {
+        Helper::remove_env_key('last_transaction_id');
+        
+        $transaction_id = Helper::write_to_env('last_transaction_id', Uuid::uuid4()->toString());
+        
         $headers = [
-            'X-Reference-Id' => Uuid::uuid4()->toString(),
+            'X-Reference-Id' => $transaction_id,
             'X-Target-Environment' => $this->service->get_api_user_info(),
             'Cache-Control' => 'no-cache',
             'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
