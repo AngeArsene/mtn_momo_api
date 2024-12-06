@@ -142,4 +142,33 @@ final class ApiUserService
             return Helper::write_to_env('access_token', $access_token);
         }
     }
+
+    public function get_transaction_status(): mixed
+    {
+        if (Helper::is_env_key_set('last_transaction_id')) {
+            $transaction_id = Helper::env()->last_transaction_id;
+
+            $headers = [
+                            'X-Target-Environment' => $this->get_api_user_info(),
+                            'Cache-Control' => 'no-cache',
+                            'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
+                            'Authorization' => 'Bearer ' . $this->create_access_token()
+            ];
+
+            $request = new Request('GET', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/'.$transaction_id, $headers);
+
+            $res = $this->http_client->send($request);
+
+            $_data =  json_decode($res->getBody());
+
+            return [
+                'status' => $_data->status,
+                'payer_number' => $_data->payer->partyId,
+                'amount' => $_data->amount,
+                'transaction_id' => $_data->externalId
+            ];
+        }
+
+        return 'no previous payment request was made.';
+    }
 }

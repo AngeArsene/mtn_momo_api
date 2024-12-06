@@ -18,7 +18,7 @@ class Application
     /** @var string The home directory path */
     public static string $HOME_DIR;
 
-    private ApiUserService $service;
+    public ApiUserService $service;
     
     /** @var Client HTTP client */
     private Client $http_client;
@@ -66,12 +66,12 @@ class Application
      * 
      * @param string $amount The amount to be paid
      * @param string $customer_number The customer number to make the payment to
-     * @return int The HTTP status code of the request
+     * @return ApiUserService|int The HTTP status code of the request
      */
-    public function request_to_pay(string $amount, string $customer_number): int
+    public function request_to_pay(string $amount, string $customer_number): ApiUserService|int
     {
         Helper::remove_env_key('last_transaction_id');
-        
+
         $transaction_id = Helper::write_to_env('last_transaction_id', Uuid::uuid4()->toString());
         
         $headers = [
@@ -86,7 +86,7 @@ class Application
         $body = '{
             "amount": "'. $amount .'",
             "currency": "'. self::CURRENCY .'",
-            "externalId": "33445",
+            "externalId": "'. rand(10000, 99999) .'",
             "payer": {
                 "partyIdType": "MSISDN",
                 "partyId": "'. $customer_number .'"
@@ -98,6 +98,7 @@ class Application
         $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay', $headers, $body);
 
         $res = $this->http_client->send($request);
-        return $res->getStatusCode();
+        
+        return ($res->getStatusCode() === 202 ? $this->service : 400);
     }
 }

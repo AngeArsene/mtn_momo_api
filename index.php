@@ -12,7 +12,7 @@ use MtnMomoPaymentGateway\Core\Application;
 $application = new Application();
 
 // Make a request to pay a specified amount to the provided partyId
-$response = $application->request_to_pay('100', '+237675962178');
+$response = $application->request_to_pay(''.rand(1000, 100000), '+23767'.rand(1000000, 9999999));
 
 // Output the response for debugging purposes
-var_dump($response);
+var_dump($response->get_transaction_status());
