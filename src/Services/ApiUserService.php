@@ -17,6 +17,8 @@ final class ApiUserService
 {
     private Client $http_client;
 
+    private const BASE_URL = 'https://sandbox.momodeveloper.mtn.com';
+
     /**
      * Constructor method to initialize the API service class with an HTTP client
      * 
@@ -47,7 +49,7 @@ final class ApiUserService
             "providerCallbackHost": ' . '"'.$callback_url.'"' . '
         }';
 
-        $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser', $headers, $body);
+        $request = new Request('POST', self::BASE_URL.'/v1_0/apiuser', $headers, $body);
 
         try {
             $res = $this->http_client->send($request);
@@ -68,7 +70,7 @@ final class ApiUserService
                 'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY
             ];
 
-            $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/'.$this->user_reference_id().'/apikey', $headers);
+            $request = new Request('POST', self::BASE_URL.'/v1_0/apiuser/'.$this->user_reference_id().'/apikey', $headers);
 
             $res = $this->http_client->send($request);
             $api_key = json_decode($res->getBody())->apiKey;
@@ -103,7 +105,7 @@ final class ApiUserService
                 'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY
             ];
 
-            $request = new Request('GET', 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/'.$this->user_reference_id(), $headers);
+            $request = new Request('GET', self::BASE_URL.'/v1_0/apiuser/'.$this->user_reference_id(), $headers);
 
             $res = $this->http_client->send($request);
             $environment = json_decode($res->getBody())->targetEnvironment;
@@ -133,7 +135,7 @@ final class ApiUserService
             'Authorization' => 'Basic ' . $credentials
         ];
 
-        $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/token/', $headers);
+        $request = new Request('POST', self::BASE_URL.'/collection/token/', $headers);
 
         $res = $this->http_client->send($request);
 
@@ -146,27 +148,27 @@ final class ApiUserService
      /**
      * Get the status of a transaction
      * 
-     * @return array|bool The status, payer number, amount, and transaction ID of the transaction
+     * @return object|bool The status, payer number, amount, and transaction ID of the transaction
      */
-    public function get_transaction_status(): array | bool
+    public function get_transaction_status(): object | bool
     {
         if (Helper::is_env_key_set('last_transaction_id')) {
             $transaction_id = Helper::env()->last_transaction_id;
 
             $headers = [
-                            'X-Target-Environment' => $this->get_api_user_info(),
-                            'Cache-Control' => 'no-cache',
-                            'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
-                            'Authorization' => 'Bearer ' . $this->create_access_token()
+                        'X-Target-Environment' => $this->get_api_user_info(),
+                        'Cache-Control' => 'no-cache',
+                        'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
+                        'Authorization' => 'Bearer ' . $this->create_access_token()
             ];
 
-            $request = new Request('GET', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/'.$transaction_id, $headers);
+            $request = new Request('GET', self::BASE_URL.'/collection/v1_0/requesttopay/'.$transaction_id, $headers);
 
             $res = $this->http_client->send($request);
 
             $_data =  json_decode($res->getBody());
 
-            return [
+            return (object) [
                 'status' => $_data->status,
                 'payer_number' => $_data->payer->partyId,
                 'amount' => $_data->amount,

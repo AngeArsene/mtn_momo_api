@@ -4,6 +4,7 @@ namespace MtnMomoPaymentGateway\Core;
 
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use MtnMomoPaymentGateway\Utils\Helper;
 use MtnMomoPaymentGateway\Services\ApiUserService;
@@ -97,8 +98,12 @@ class Application
 
         $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay', $headers, $body);
 
-        $res = $this->http_client->send($request);
+        try {
+            $res = $this->http_client->send($request);
+            $response_code = $res->getStatusCode();
 
-        return ($res->getStatusCode() === 202 ? $this->service : 400);
+        } catch (RequestException $exception) { return $exception->getCode(); }
+
+        return ($response_code === 202 ? $this->service : $response_code);
     }
 }
