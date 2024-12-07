@@ -17,7 +17,7 @@ final class ApiUserService
 {
     private Client $http_client;
 
-    private const BASE_URL = 'https://sandbox.momodeveloper.mtn.com';
+    public const BASE_URL = 'https://sandbox.momodeveloper.mtn.com';
 
     /**
      * Constructor method to initialize the API service class with an HTTP client

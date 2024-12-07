@@ -96,7 +96,7 @@ class Application
             "payeeNote": "'. self::PAYER_NOTE .'"
         }';
 
-        $request = new Request('POST', 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay', $headers, $body);
+        $request = new Request('POST', ApiUserService::BASE_URL.'/collection/v1_0/requesttopay', $headers, $body);
 
         try {
             $res = $this->http_client->send($request);
