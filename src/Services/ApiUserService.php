@@ -140,8 +140,8 @@ final class ApiUserService
         $res = $this->http_client->send($request);
 
         if ($res->getStatusCode() == 200) {
-            $access_token = json_decode($res->getBody())->access_token;
-            return Helper::write_to_env('access_token', $access_token);
+            $token = json_decode($res->getBody())->access_token;
+            return Helper::write_to_env('access_token', $token);
         }
     }
 
