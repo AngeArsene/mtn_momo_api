@@ -76,9 +76,9 @@ final class ApiUserService
             $api_key = json_decode($res->getBody())->apiKey;
 
             return Helper::write_to_env('user_api_key', $api_key);
-        } else {
-            return Helper::env()->user_api_key;
         }
+
+        return Helper::env()->user_api_key;
     }
 
     /**
@@ -86,7 +86,7 @@ final class ApiUserService
      *
      * @return string The generated user reference ID
      */
-    protected function user_reference_id(): string
+    private function user_reference_id(): string
     {
         $uuid = Uuid::uuid4();
         return Helper::write_to_env('user_reference_id', $uuid);
