@@ -4,9 +4,9 @@ namespace MtnMomoPaymentGateway\Core;
 
 use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use MtnMomoPaymentGateway\Utils\Helper;
+use GuzzleHttp\Exception\RequestException;
 use MtnMomoPaymentGateway\Services\ApiUserService;
 
 /**
@@ -19,6 +19,7 @@ class Application
     /** @var string The home directory path */
     public static string $HOME_DIR;
 
+    /** @var ApiUserService The service for managing API users and access tokens */
     public ApiUserService $service;
     
     /** @var Client HTTP client */
@@ -33,8 +34,13 @@ class Application
     /** @var string The callback URL */
     public static string $CALLBACK_URL;
 
+    /** @const string The currency used for transactions */
     private const CURRENCY = 'EUR';
+
+    /** @const string The note for the payer */
     private const PAYER_NOTE = 'note';
+
+    /** @const string The message for the payer */
     private const PAYER_MESSAGE = 'message';
 
     /**
@@ -44,8 +50,10 @@ class Application
     {
         self::$HOME_DIR = dirname(dirname(__DIR__));
 
+        // Initialize the HTTP client with SSL verification disabled
         $this->http_client = new Client(['verify' => false]);
         
+        // Bootstrap the application
         $this->bootstrap();
     }
 
@@ -71,8 +79,10 @@ class Application
      */
     public function request_to_pay(string $amount, string $customer_number): ApiUserService | int
     {
+        // Remove any existing transaction ID from the environment variables
         Helper::remove_env_key('last_transaction_id');
 
+        // Generate a new transaction ID and store it in the environment variables
         $transaction_id = Helper::write_to_env('last_transaction_id', Uuid::uuid4()->toString());
         
         $headers = [
@@ -99,11 +109,16 @@ class Application
         $request = new Request('POST', ApiUserService::BASE_URL.'/collection/v1_0/requesttopay', $headers, $body);
 
         try {
+            // Send the request and get the response
             $res = $this->http_client->send($request);
             $response_code = $res->getStatusCode();
 
-        } catch (RequestException $exception) { return $exception->getCode(); }
+        } catch (RequestException $exception) { 
+            // Return the exception code if the request fails
+            return $exception->getCode(); 
+        }
 
+        // Return the service instance if the request is successful, otherwise return the response code
         return ($response_code === 202 ? $this->service : $response_code);
     }
 }

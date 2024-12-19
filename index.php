@@ -11,8 +11,14 @@ use MtnMomoPaymentGateway\Core\Application;
 // Instantiate the main Application class to initialize the MtnMomo Payment Gateway
 $application = new Application();
 
-// Make a request to pay a specified amount to the provided partyId
-$response = $application->request_to_pay(''.rand(1000, 100000), '+23767'.rand(1000000, 9999999));
+// Generate a random amount between 1000 and 100000
+$amount = ''.rand(1000, 100000);
+
+// Generate a random party ID with the format +23767XXXXXXX
+$partyId = '+23767'.rand(1000000, 9999999);
+
+// Make a request to pay the specified amount to the generated partyId
+$response = $application->request_to_pay($amount, $partyId);
 
 // Output the response for debugging purposes
 var_dump($response->get_transaction_status());

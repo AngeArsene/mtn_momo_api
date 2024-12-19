@@ -15,10 +15,12 @@ final class Helper
 
     /**
      * Get the path to the .env file
+     *
+     * @return string The path to the .env file
      */
     private function env_file(): string
     {
-        return Application::$HOME_DIR. DIRECTORY_SEPARATOR. '.env';
+        return Application::$HOME_DIR . DIRECTORY_SEPARATOR . '.env';
     }
 
     /**
@@ -98,8 +100,6 @@ final class Helper
     {
         $envFile = (new self())->env_file();
 
-        $value = null;
-
         // Read the existing content of the .env file
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         
@@ -116,15 +116,12 @@ final class Helper
             }
         }
 
-        // If the key was found and has a non-empty value, return it
+        // If the key was found, remove it
         if ($found) {
-            if ($foundValue !== '') {
-                $lineIndex = array_search($line, $lines);
-                $lines[$lineIndex] = ""; // Update the line with new value
+            $lineIndex = array_search($line, $lines);
+            $lines[$lineIndex] = ""; // Remove the line
 
-                file_put_contents($envFile, implode(PHP_EOL, $lines) . PHP_EOL);
-                return; // Return the newly set value
-            }
+            file_put_contents($envFile, implode(PHP_EOL, $lines) . PHP_EOL);
         }
     }
 }

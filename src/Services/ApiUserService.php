@@ -15,8 +15,14 @@ use MtnMomoPaymentGateway\Core\Application;
  */
 final class ApiUserService 
 {
+    /**
+     * @var Client The HTTP client used for making API requests
+     */
     private Client $http_client;
 
+    /**
+     * @const string The base URL for the MTN Momo API
+     */
     public const BASE_URL = 'https://sandbox.momodeveloper.mtn.com';
 
     /**
@@ -123,8 +129,10 @@ final class ApiUserService
      */
     public function create_access_token(): string
     {
+        // Remove any existing access token from the environment variables
         Helper::remove_env_key('access_token');
 
+        // Generate the username and password for the API user
         $username = $this->user_reference_id();
         $password = $this->create_api_key();
         $credentials = base64_encode("$username:$password");
@@ -145,7 +153,7 @@ final class ApiUserService
         }
     }
 
-     /**
+    /**
      * Get the status of a transaction
      * 
      * @return object|bool The status, payer number, amount, and transaction ID of the transaction
@@ -156,10 +164,10 @@ final class ApiUserService
             $transaction_id = Helper::env()->last_transaction_id;
 
             $headers = [
-                        'X-Target-Environment' => $this->get_api_user_info(),
-                        'Cache-Control' => 'no-cache',
-                        'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
-                        'Authorization' => 'Bearer ' . $this->create_access_token()
+                'X-Target-Environment' => $this->get_api_user_info(),
+                'Cache-Control' => 'no-cache',
+                'Ocp-Apim-Subscription-Key' => Application::$PRIMARY_KEY,
+                'Authorization' => 'Bearer ' . $this->create_access_token()
             ];
 
             $request = new Request('GET', self::BASE_URL.'/collection/v1_0/requesttopay/'.$transaction_id, $headers);
